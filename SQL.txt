@@ -1,0 +1,299 @@
+ SHOW databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+ CREATE database students;
+ SHOW databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| students           |
+| sys                |
++--------------------+
+ USE students;
+ SHOW tables;
+	Empty set
+ CREATE table courses 
+	(id INT(11) NOT NULL PRIMARY KEY,
+ 	faculty VARCHAR(55) NULL,
+ 	number INT(2) NULL);
+ SELECT * FROM courses;
+ DESC courses;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| id      | int         | NO   | PRI | NULL    |       |
+| faculty | varchar(55) | YES  |     | NULL    |       |
+| number  | int         | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+ INSERT INTO courses VALUES (1, "bio", 1);
+ INSERT INTO courses VALUES (2, "chem", 2);
+ INSERT INTO courses VALUES (3, "math", 3);
+ INSERT INTO courses VALUES (4, "geo", 4);
+ INSERT INTO courses VALUES (5, "gum", 5);
+ SELECT * FROM courses;
++----+---------+--------+
+| id | faculty | number |
++----+---------+--------+
+|  1 | bio     |      1 |
+|  2 | chem    |      2 |
+|  3 | math    |      3 |
+|  4 | geo     |      4 |
+|  5 | gum     |      5 |
++----+---------+--------+
+ DELETE FROM courses WHERE faculty="gum";
+ SELECT * FROM courses;
++----+---------+--------+
+| id | faculty | number |
++----+---------+--------+
+|  1 | bio     |      1 |
+|  2 | chem    |      2 |
+|  3 | math    |      3 |
+|  4 | geo     |      4 |
++----+---------+--------+
+ UPDATE courses SET faculty="gum" WHERE faculty="geo";
+ SELECT * FROM courses;
++----+---------+--------+
+| id | faculty | number |
++----+---------+--------+
+|  1 | bio     |      1 |
+|  2 | chem    |      2 |
+|  3 | math    |      3 |
+|  4 | gum     |      4 |
++----+---------+--------+
+ ALTER TABLE courses DROP COLUMN id;
+ SELECT * FROM courses;
++---------+--------+
+| faculty | number |
++---------+--------+
+| bio     |      1 |
+| chem    |      2 |
+| math    |      3 |
+| gum     |      4 |
++---------+--------+
+ ALTER TABLE courses ADD COLUMN id INT AFTER number;
+ SELECT * FROM courses;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 | NULL |
+| chem    |      2 | NULL |
+| math    |      3 | NULL |
+| gum     |      4 | NULL |
++---------+--------+------+
+ ALTER TABLE courses DROP COLUMN id;
+ SELECT * FROM courses;
++---------+--------+
+| faculty | number |
++---------+--------+
+| bio     |      1 |
+| chem    |      2 |
+| math    |      3 |
+| gum     |      4 |
++---------+--------+
+ CREATE table Id (id INT(11) NOT NULL PRIMARY KEY);
+ SELECT * FROM Id;
+	Empty set
+ DESC Id;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id    | int  | NO   | PRI | NULL    |       |
++-------+------+------+-----+---------+-------+
+ INSERT INTO Id VALUES (1);
+ INSERT INTO Id VALUES (2);
+ INSERT INTO Id VALUES (3);
+ INSERT INTO Id VALUES (4);
+ SELECT * FROM Id;
++----+
+| id |
++----+
+|  1 |
+|  2 |
+|  3 |
+|  4 |
++----+
+ SELECT c.faculty, c.number, i.id
+	 FROM courses c JOIN Id i
+	 ON c.number=i.id;
++---------+--------+----+
+| faculty | number | id |
++---------+--------+----+
+| bio     |      1 |  1 |
+| chem    |      2 |  2 |
+| math    |      3 |  3 |
+| gum     |      4 |  4 |
++---------+--------+----+
+
+ ALTER TABLE courses ADD COLUMN id INT;
+ SELECT * FROM courses;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 | NULL |
+| chem    |      2 | NULL |
+| math    |      3 | NULL |
+| gum     |      4 | NULL |
++---------+--------+------+
+ UPDATE courses SET id=number;
+SELECT * FROM courses;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| chem    |      2 |    2 |
+| math    |      3 |    3 |
+| gum     |      4 |    4 |
++---------+--------+------+
+ INSERT INTO courses VALUES ("teo", 1, 5);
+ SELECT * FROM courses;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| chem    |      2 |    2 |
+| math    |      3 |    3 |
+| gum     |      4 |    4 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT DISTINCT number FROM courses;
++--------+
+| number |
++--------+
+|      1 |
+|      2 |
+|      3 |
+|      4 |
++--------+
+ SELECT * FROM courses LIMIT 2;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| chem    |      2 |    2 |
++---------+--------+------+
+ SELECT number AS номер FROM courses;
++-------+
+| номер |
++-------+
+|     1 |
+|     2 |
+|     3 |
+|     4 |
+|     1 |
++-------+
+ SELECT faculty, number FROM courses WHERE faculty="bio";
++---------+--------+
+| faculty | number |
++---------+--------+
+| bio     |      1 |
++---------+--------+
+ SELECT number FROM courses WHERE number > 1;
++--------+
+| number |
++--------+
+|      2 |
+|      3 |
+|      4 |
++--------+
+ SELECT * FROM courses WHERE number=1 AND faculty="bio";
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
++---------+--------+------+
+ SELECT * FROM courses WHERE faculty LIKE "%o";
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT faculty FROM courses WHERE faculty LIKE "_e%";
++---------+
+| faculty |
++---------+
+| teo     |
++---------+
+ SELECT * FROM courses WHERE number BETWEEN 2 AND 4;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| chem    |      2 |    2 |
+| math    |      3 |    3 |
+| gum     |      4 |    4 |
++---------+--------+------+
+ SELECT * FROM courses WHERE NOT number BETWEEN 2 AND 4;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT * FROM courses WHERE number IN (1,4);
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| gum     |      4 |    4 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT * FROM courses WHERE (faculty="teo" OR faculty="bio") AND number=1;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT * FROM courses ORDER BY faculty;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| bio     |      1 |    1 |
+| chem    |      2 |    2 |
+| gum     |      4 |    4 |
+| math    |      3 |    3 |
+| teo     |      1 |    5 |
++---------+--------+------+
+ SELECT * FROM courses ORDER BY faculty DESC;
++---------+--------+------+
+| faculty | number | id   |
++---------+--------+------+
+| teo     |      1 |    5 |
+| math    |      3 |    3 |
+| gum     |      4 |    4 |
+| chem    |      2 |    2 |
+| bio     |      1 |    1 |
++---------+--------+------+
+ SELECT AVG(number) FROM courses;
++-------------+
+| AVG(number) |
++-------------+
+|      2.2000 |
++-------------+
+ SELECT SUM(number) FROM courses;
++-------------+
+| SUM(number) |
++-------------+
+|          11 |
++-------------+
+ SELECT MIN(number) AS min_number FROM courses;
++------------+
+| min_number |
++------------+
+|          1 |
++------------+
+ SELECT COUNT(faculty) FROM courses;
++----------------+
+| COUNT(faculty) |
++----------------+
+|              5 |
++----------------+
